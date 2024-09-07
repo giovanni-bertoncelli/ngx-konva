@@ -4,6 +4,7 @@ import { KoShape } from '../common';
 import { KoListeningDirective } from '../common/ko-listening';
 import { KoNestable, KoNestableNode } from '../common/ko-nestable';
 import { Transformer } from 'konva/lib/shapes/Transformer';
+import { KoLayerComponent } from '../components/ko-layer.component';
 
 @Directive({
   selector: '[koTransform]',
@@ -14,7 +15,7 @@ import { Transformer } from 'konva/lib/shapes/Transformer';
 })
 export class KoTransformDirective implements OnInit, OnDestroy {
   @Input() set
-  koTransformEnabled(enable:boolean) {
+  koTransformEnabled(enable: boolean) {
     if (enable || enable === undefined) {
       this.addTransformer();
     } else {
@@ -41,7 +42,8 @@ export class KoTransformDirective implements OnInit, OnDestroy {
   onTranformListener = this.onTransform.bind(this);
 
   constructor(
-    @Optional() @Self() nestable: KoNestable
+    @Optional() @Self() nestable: KoNestable,
+    private koLayerComponent: KoLayerComponent
   ) {
     if (!nestable) {
       throw new Error('koTransform attachable only to ko-nestable');
@@ -61,15 +63,21 @@ export class KoTransformDirective implements OnInit, OnDestroy {
     this.removeTransformer();
   }
 
-  addTransformer() {
+  private addTransformer() {
+    if (this.transformer) {
+      this.removeTransformer();
+    }
+
     this.transformer = new Transformer({...this.koTransformOptions, nodes: [this.node]});
-    this.node.getLayer()?.add(this.transformer);
+    this.koLayerComponent.layer.add(this.transformer);
   }
 
-  removeTransformer() {
-    this.transformer?.setNodes([]);
-    this.transformer?.destroy();
-    this.transformer = null;
+  private removeTransformer() {
+    if (this.transformer) {
+      this.transformer?.setNodes([]);
+      this.transformer?.destroy();
+      this.transformer = null;
+    }
   }
 
   addListeners() {
