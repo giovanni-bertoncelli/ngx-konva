@@ -278,8 +278,8 @@ It allows to capture all drag events. [Reference](https://konvajs.org/docs/drag_
 ### KoTransformDirective
 
 ```html
-<ko-circle koTransform (koTranform)="onTranform($event)" (koTranformStart)="onTranformStart($event)"
-   (koTransformEnd)="onTranformEnd($event)" [config]="{ 
+<ko-circle koTransform (koTransform)="onTransform($event)" (koTransformStart)="onTransformStart($event)"
+   (koTransformEnd)="onTransformEnd($event)" [config]="{ 
           radius: 120,
           fill: 'blue',
           stroke: 'black',
@@ -290,6 +290,10 @@ It allows to capture all drag events. [Reference](https://konvajs.org/docs/drag_
 ```
 
 It allows to capture all transform events. [Reference](https://konvajs.org/docs/select_and_transform/Transform_Events.html#sidebar).
+Optional inputs:
+
+- `koTransformEnabled`: boolean value indicating whether the transform GUI element should be available to the user
+- `koTransformOptions`: options for the underlying Transform object (i.e. rotateEnabled, resizeEnabled, keepRatio, enabledAnchors, etc.)
 
 ## Inner events
 
